@@ -6,11 +6,15 @@
   "files": [
     "build/**/*"
   ],
+  "engines": {
+    "node": ">=14"
+  },
   "scripts": {
     "build": "npm run clean && npx tsc -d",
     "clean": "rm -rf ./build",
+    "get-kms-pkh": "ts-node ./get-kms-pkh.ts",
     "lint": "eslint . --ext .ts --fix",
-    "test": "echo \"no tests :(\"",
+    "test": "mocha",
     "prepublishOnly": "npm run build"
   },
   "repository": {
@@ -35,13 +39,16 @@
   "devDependencies": {
     "@taquito/taquito": "^12.1.0",
     "@taquito/utils": "^12.1.0",
+    "@types/mocha": "^9.1.1",
     "@typescript-eslint/eslint-plugin": "^3.10.1",
     "@typescript-eslint/parser": "^3.10.1",
+    "dotenv": "^16.0.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-mocha": "^8.2.0",
     "eslint-plugin-prettier": "^3.4.1",
+    "mocha": "^10.0.0",
     "prettier": "^2.6.2",
     "ts-node": "^10.7.0",
     "typescript": "^4.0.2"
