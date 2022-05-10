@@ -26,7 +26,7 @@
     "@types/secp256k1": "^4.0.1",
     "blakejs": "^1.1.0",
     "bs58check": "^2.1.2",
-    "secp256k1": "^4.0.2"
+    "secp256k1": "^4.0.3"
   },
   "bugs": {
     "url": "https://github.com/keshan3262/tezos-kms/issues"
@@ -35,14 +35,14 @@
   "devDependencies": {
     "@taquito/taquito": "^12.1.0",
     "@taquito/utils": "^12.1.0",
-    "@typescript-eslint/eslint-plugin": "^3.9.0",
-    "@typescript-eslint/parser": "^3.9.0",
-    "eslint": "^7.6.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-mocha": "^8.0.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "prettier": "^2.0.5",
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
+    "@typescript-eslint/parser": "^3.10.1",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-mocha": "^8.2.0",
+    "eslint-plugin-prettier": "^3.4.1",
+    "prettier": "^2.6.2",
     "ts-node": "^10.7.0",
     "typescript": "^4.0.2"
   },
