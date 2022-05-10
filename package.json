@@ -1,6 +1,6 @@
 {
   "name": "@keshan3262/tezos-kms",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "A fork of @tacoinfra/tezos-kms with performance improvements",
   "main": "build/index.js",
   "files": [
