@@ -1,8 +1,8 @@
 {
   "name": "@keshan3262/tezos-kms",
   "version": "1.1.2",
-  "description": "A fork of @tacoinfra/tezos-kms which enables extended KMS client configuration.",
-  "main": "build/src/index.js",
+  "description": "A fork of @tacoinfra/tezos-kms with performance improvements",
+  "main": "build/index.js",
   "files": [
     "build/**/*"
   ],
@@ -20,10 +20,10 @@
   "author": "Blockscale LLC",
   "license": "MIT",
   "dependencies": {
+    "@aws-sdk/client-kms": "^3.87.0",
     "@lapo/asn1js": "^1.2.1",
     "@types/node": "^14.10.1",
     "@types/secp256k1": "^4.0.1",
-    "aws-sdk": "^2.751.0",
     "blakejs": "^1.1.0",
     "bs58check": "^2.1.2",
     "secp256k1": "^4.0.2"
@@ -33,6 +33,8 @@
   },
   "homepage": "https://github.com/keshan3262/tezos-kms#readme",
   "devDependencies": {
+    "@taquito/taquito": "^12.1.0",
+    "@taquito/utils": "^12.1.0",
     "@typescript-eslint/eslint-plugin": "^3.9.0",
     "@typescript-eslint/parser": "^3.9.0",
     "eslint": "^7.6.0",
@@ -41,6 +43,7 @@
     "eslint-plugin-mocha": "^8.0.0",
     "eslint-plugin-prettier": "^3.1.4",
     "prettier": "^2.0.5",
+    "ts-node": "^10.7.0",
     "typescript": "^4.0.2"
   },
   "keywords": [

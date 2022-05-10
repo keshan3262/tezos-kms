@@ -7,7 +7,11 @@
 
 import Prefixes from './prefixes'
 import ASN1 from './asn1'
-import { KMS } from 'aws-sdk'
+import {
+  KMSClient,
+  GetPublicKeyCommand,
+  SignCommand,
+} from '@aws-sdk/client-kms'
 import Utils from './utils'
 
 // AWS KMS Signing Algorithm.
@@ -21,8 +25,9 @@ const PUBLIC_KEY_HASH_LENGTH = 20
 
 /** Provides capabilities for working with Tezos Keys stored in AWS KMS. */
 export default class TezosKmsClient {
-  private readonly kms: KMS
+  private readonly kms: KMSClient
   private readonly kmsKeyId: string
+  private publicKeyBytes: Uint8Array | undefined
 
   /**
    * Initialize a new TezosKmsClient.
@@ -31,7 +36,7 @@ export default class TezosKmsClient {
    * @param region The region the KMS key is in.
    */
   public constructor(kmsKeyId: string, region: string) {
-    this.kms = new KMS({
+    this.kms = new KMSClient({
       region,
     })
     this.kmsKeyId = kmsKeyId
@@ -40,14 +45,16 @@ export default class TezosKmsClient {
   /**
    * Retrieve the public key from KMS.
    *
-   * @returns The public key in a base58check encoded format.
+   * @returns The bytes of public key
    */
-  public async getPublicKey(): Promise<string> {
-    const publicKeyResponse = await this.kms
-      .getPublicKey({
-        KeyId: this.kmsKeyId,
-      })
-      .promise()
+  public async getPublicKeyBytes(): Promise<Uint8Array> {
+    if (this.publicKeyBytes) {
+      return this.publicKeyBytes
+    }
+
+    const publicKeyResponse = await this.kms.send(
+      new GetPublicKeyCommand({ KeyId: this.kmsKeyId }),
+    )
 
     const publicKeyDer = publicKeyResponse.PublicKey
     if (publicKeyDer === undefined) {
@@ -57,9 +64,21 @@ export default class TezosKmsClient {
     const decodedPublicKey = ASN1.decode(publicKeyDer)
     const publicKeyHex = decodedPublicKey.sub[1].toHexStringContent()
     const uncompressedPublicKeyBytes = Utils.hexToBytes(publicKeyHex)
-    const publicKeyBytes = Utils.compressKey(uncompressedPublicKeyBytes)
+    this.publicKeyBytes = Utils.compressKey(uncompressedPublicKeyBytes)
 
-    return Utils.base58CheckEncode(publicKeyBytes, Prefixes.secp256k1PublicKey)
+    return this.publicKeyBytes
+  }
+
+  /**
+   * Retrieve the public key from KMS.
+   *
+   * @returns The public key in a base58check encoded format.
+   */
+  public async getPublicKey(): Promise<string> {
+    return Utils.base58CheckEncode(
+      await this.getPublicKeyBytes(),
+      Prefixes.secp256k1PublicKey,
+    )
   }
 
   /**
@@ -68,24 +87,8 @@ export default class TezosKmsClient {
    * @returns The public key hash in a base58check encoded format.
    */
   public async getPublicKeyHash(): Promise<string> {
-    const publicKeyResponse = await this.kms
-      .getPublicKey({
-        KeyId: this.kmsKeyId,
-      })
-      .promise()
-
-    const publicKeyDer = publicKeyResponse.PublicKey
-    if (publicKeyDer === undefined) {
-      throw new Error("Couldn't retreive key from AWS KMS")
-    }
-
-    const decodedPublicKey = ASN1.decode(publicKeyDer)
-    const publicKeyHex = decodedPublicKey.sub[1].toHexStringContent()
-    const uncompressedPublicKeyBytes = Utils.hexToBytes(publicKeyHex)
-    const publicKeyBytes = Utils.compressKey(uncompressedPublicKeyBytes)
-
     return Utils.base58CheckEncode(
-      Utils.blake2b(publicKeyBytes, PUBLIC_KEY_HASH_LENGTH),
+      Utils.blake2b(await this.getPublicKeyBytes(), PUBLIC_KEY_HASH_LENGTH),
       Prefixes.secp256k1PublicKeyHash,
     )
   }
@@ -109,7 +112,9 @@ export default class TezosKmsClient {
       MessageType: 'DIGEST',
     }
 
-    const { Signature: derSignature } = await this.kms.sign(params).promise()
+    const { Signature: derSignature } = await this.kms.send(
+      new SignCommand(params),
+    )
     if (!(derSignature instanceof Uint8Array)) {
       throw new Error('Unexpected response from KMS')
     }
