@@ -1,7 +1,7 @@
 {
-  "name": "@tacoinfra/tezos-kms",
-  "version": "1.1.1",
-  "description": "Utilize AWS KMS Keys to work with the Tezos blockchain.",
+  "name": "@keshan3262/tezos-kms",
+  "version": "1.1.2",
+  "description": "A fork of @tacoinfra/tezos-kms which enables extended KMS client configuration.",
   "main": "build/src/index.js",
   "files": [
     "build/**/*"
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tacoinfra/tezos-kms.git"
+    "url": "git+https://github.com/keshan3262/tezos-kms.git"
   },
   "author": "Blockscale LLC",
   "license": "MIT",
@@ -25,12 +25,13 @@
     "@types/secp256k1": "^4.0.1",
     "aws-sdk": "^2.751.0",
     "blakejs": "^1.1.0",
+    "bs58check": "^2.1.2",
     "secp256k1": "^4.0.2"
   },
   "bugs": {
-    "url": "https://github.com/tacoinfra/tezos-kms/issues"
+    "url": "https://github.com/keshan3262/tezos-kms/issues"
   },
-  "homepage": "https://github.com/tacoinfra/tezos-kms#readme",
+  "homepage": "https://github.com/keshan3262/tezos-kms#readme",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.9.0",
     "@typescript-eslint/parser": "^3.9.0",
