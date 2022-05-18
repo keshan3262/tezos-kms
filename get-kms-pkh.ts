@@ -2,7 +2,7 @@ import { TezosKmsClient } from './src'
 
 const [, , keyId, region] = process.argv
 
-if (!keyId || !keyId.match(/mrk-[0-9a-f]{32}/g) || !region) {
+if (!keyId || !region) {
   console.log(`Usage:\nnpm run get-kms-pkh <kms-key-id> <aws-region>`)
   process.exit(1)
 }
